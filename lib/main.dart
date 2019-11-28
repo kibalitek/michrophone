@@ -1,33 +1,74 @@
 import 'package:flutter/material.dart';
 
-void main ()  => runApp(
-
-    Sring name; Michrophone
-
+void main() async {
+  runApp(
     MaterialApp(
-      home: Text('Hello World')
-    )
-);
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: MyApp(),
+      ),
+    ),
+  );
+}
 
-
-
-/*
-MyApp extends StatelessWidget{
-  //This widget is the root of your application.
+class MyApp extends StatefulWidget {
   @override
-  Widget build ( BuildContext context)[
-    return MaterialApp(
-      title:'Flutter Demo',
-  theme:ThemeData(
-      primarySwatch: Colors.black,
-      ),//ThemeData
-  home:MyHomePage(title:'Flutter Demo Home Page'),
-      );// MaterialApp
-  ]
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+
+    animation = CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeInOutCubic,
+    ).drive(Tween(begin: 0, end: 2));
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        controller
+          ..reset()
+          ..forward();
+      },
+      child: RotationTransition(
+        turns: animation,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: FlutterLogo(),
+            ),
+            Center(
+              child: Text(
+                'Welcome to Busia!',
+                style: TextStyle(
+                  fontSize: 60.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-}
-*/
